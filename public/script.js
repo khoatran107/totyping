@@ -28,8 +28,12 @@ let endTime = 0;
 
 function printResult() {
   endTime = Date.now();
-  const wpm = parseInt(wordNum * 60000 / (endTime - startTime));
-  document.getElementById('result').textContent += ` ${wpm} WPM`;
+  let wpm = 0;
+  const accuracy = (100 - wrongWords.length * 100.0 / wordNum).toFixed(2);
+  if (accuracy > 20)
+    wpm = parseInt((wordNum - wrongWords.length) * 60000 / (endTime - startTime));
+  document.getElementById('wpm-result').textContent += ` ${wpm} WPM`;
+  document.getElementById('accuracy-result').textContent += ` ${accuracy}%`;
   const table = document.querySelector('table');
   if (wrongWords.length === 0) return;
   for (wrongWord of wrongWords) {
@@ -69,14 +73,16 @@ input.addEventListener('keydown', (e) => {
         'true': para.children[curIdx].textContent,
         'false': current
       });
-    } else para.children[curIdx].style.background = '#fff';
+    } else {
+      para.children[curIdx].style.background = '#fff';
+    }
     current = '';
     curIdx++;
     if (curIdx >= wordNum) {
       printResult();
       current = '';
-      input.setAttribute('readonly', true);
-    } else 
+      input.removeEventListener('keydown');
+    } else
       para.children[curIdx].style.background = '#aaa';
   } else if (e.key.length === 1) {
     current += e.key;
@@ -87,7 +93,7 @@ input.addEventListener('keydown', (e) => {
       if (current === para.children[curIdx].textContent && curIdx === wordNum - 1) {
         printResult();
         current = '';
-        input.setAttribute('readonly', true);
+        input.removeEventListener('keydown');
       }
     }
 
