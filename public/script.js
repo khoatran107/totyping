@@ -2,11 +2,18 @@ const para = document.querySelector('p');
 
 const newParaText = para.textContent
   .split(' ')
-  .map((word) => `<span>${word}</span> `);
+  .map((word) => {
+    const span = document.createElement('span');
+    span.textContent = word;
+    return span;
+  });
 
 para.innerHTML = '';
 
-for (word of newParaText) para.innerHTML += word;
+for (word of newParaText) {
+  para.appendChild(word);
+  para.innerHTML += ' ';
+}
 
 const wordNum = para.children.length;
 const input = document.querySelector('input[type="text"]');
@@ -18,11 +25,39 @@ const wrongWords = [];
 
 let startTime = 0;
 let endTime = 0;
+
+function printResult() {
+  endTime = Date.now();
+  const wpm = parseInt(wordNum * 60000 / (endTime - startTime));
+  document.getElementById('result').textContent += ` ${wpm} WPM`;
+  const table = document.querySelector('table');
+  if (wrongWords.length === 0) return;
+  for (wrongWord of wrongWords) {
+    const row = document.createElement('tr');
+    const col = document.createElement('td');
+    col.textContent = wrongWord.false;
+    const col2 = document.createElement('td');
+    col2.textContent = wrongWord.true;
+    row.appendChild(col);
+    row.appendChild(col2);
+    table.appendChild(row);
+    table.classList.remove(['hidden']);
+  }
+}
+
 input.addEventListener('keydown', (e) => {
-  if (startTime === 0)
-    startTime = Date.now() / 1000;
-  if (curIdx >= wordNum)
+
+  if (startTime === 0) {
+    startTime = Date.now();
+    input.setAttribute('placeholder', '');
+  }
+
+  if (curIdx >= wordNum) {
     return;
+  }
+  if (!(e.keyCode >= 112 && e.keyCode <= 123))
+    e.preventDefault();
+
   if (e.keyCode === 32) {
     if (current.split('').join() === '') {
       current = '';
@@ -34,49 +69,31 @@ input.addEventListener('keydown', (e) => {
         'true': para.children[curIdx].textContent,
         'false': current
       });
-    }
-    else para.children[curIdx].style.background = '#fff';
-    input.value = '';
+    } else para.children[curIdx].style.background = '#fff';
     current = '';
     curIdx++;
     if (curIdx >= wordNum) {
-      console.log('Done');
+      printResult();
+      current = '';
       input.setAttribute('readonly', true);
-      return;
-    }
-    para.children[curIdx].style.background = '#aaa';
-    return;
-  }
-  if (input.value === ' ') input.value = '';
-});
-
-input.addEventListener('keyup', () => {
-  if (curIdx >= wordNum) {
-    if (endTime == 0) {
-      endTime = Date.now() / 1000;
-      const wpm = parseInt(wordNum * 60 / (endTime - startTime));
-      document.getElementById('result').textContent += ` ${wpm} WPM`;
-      const table = document.querySelector('table');
-      for (wrongWord of wrongWords) {
-        const row = document.createElement('tr');
-        const col = document.createElement('td');
-        col.textContent = wrongWord.false;
-        const col2 = document.createElement('td');
-        col2.textContent = wrongWord.true;
-        row.appendChild(col);
-        row.appendChild(col2);
-        table.appendChild(row);
+    } else 
+      para.children[curIdx].style.background = '#aaa';
+  } else if (e.key.length === 1) {
+    current += e.key;
+    if (current !== para.children[curIdx].textContent.substr(0, current.length)) {
+      para.children[curIdx].style.background = '#f00';
+    } else {
+      para.children[curIdx].style.background = '#aaa';
+      if (current === para.children[curIdx].textContent && curIdx === wordNum - 1) {
+        printResult();
+        current = '';
+        input.setAttribute('readonly', true);
       }
     }
-    return;
+
+  } else if (e.keyCode === 8) {
+    current = current.slice(0, -1);
   }
-  if (input.value === ' ') input.value = '';
-  current = input.value;
-  if (
-    current !== para.children[curIdx].textContent.substr(0, current.length)
-  ) {
-    para.children[curIdx].style.background = '#f00';
-  } else {
-    para.children[curIdx].style.background = '#aaa';
-  }
+
+  input.value = current;
 });

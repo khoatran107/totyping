@@ -54,6 +54,10 @@ input[type="text"] {
   font-size: 1.6rem;
 }
 
+.hidden, .hidden th, .hidden td {
+  display: none;
+}
+
 table, th, td {
   border: 1px solid black;
   font-size: 1.4rem;
