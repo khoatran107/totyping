@@ -18,7 +18,7 @@ html {
 }
 
 body {
-  display: flex;
+  display: grid;
   align-items: center;
   justify-content: center;
 }
@@ -41,7 +41,6 @@ header {
 p {
   text-align: justify;
   font-size: 1.7rem;
-  position: relative;
 }
 
 span {
@@ -54,20 +53,6 @@ span.wrong {
 
 span.typing {
   background: #fae5df;
-}
-
-div.layover {
-  text-align: justify;
-  font-size: 1.6rem;
-  height: 1.6rem;
-  border-right: 1px solid #000;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-h1[--nth-letter="3"] {
-  background: yellow;
 }
 
 input[type="text"] {
@@ -94,14 +79,11 @@ input[type="text"] {
 table {
   margin-top: 1rem;
   border-collapse: collapse;
+  max-height: 20rem;
 }
 
 th {
   background: #ff7f5c;
-}
-
-tr:nth-child(odd) {
-  background: #f06e4641;
 }
 
 table, th, td {
