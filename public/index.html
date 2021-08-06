@@ -4,24 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>Totyping</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <header><h1>Totyping</h1></header>
-    <main>
-      <p>The real evil is the power to kill people. Someone who finds himself with that power is cursed. No matter how you use it, anything obtained by killing people can never bring true happiness.</p>
-      <input type="text" name="text" placeholder="Type here...">
-      <div>
-        <div id="wpm-result" class="result">Result :</div>
-        <div id="accuracy-result" class="result">Accuracy :</div>
-      </div>
-      <table class="hidden">
-        <tr>
-          <th>You typed</th>
-          <th>Correct word</th>
-        </tr>
-      </table>
-    </main>
+    <div class="container">
+      <header><h1>Totyping</h1></header>
+      <main>
+        <p></p>
+        <input
+          type="text"
+          name="text"
+          spellcheck="false"
+          placeholder="Type here..."
+        />
+        <div class="result-container">
+          <div id="wpm-result" class="result">Result :</div>
+          <div id="accuracy-result" class="result">Accuracy :</div>
+        </div>
+        <table class="hidden">
+          <tr>
+            <th>You typed</th>
+            <th>Correct word</th>
+          </tr>
+        </table>
+      </main>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
